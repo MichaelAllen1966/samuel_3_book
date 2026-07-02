@@ -1,122 +1,100 @@
-\documentclass[11pt,a4paper,oneside]{book}
+\documentclass{article}
 
-%--------------------------------------------------
-% Encoding, language, and fonts
-%--------------------------------------------------
-\usepackage[T1]{fontenc}
+% Formatting
+\DeclareUnicodeCharacter{2060}{\nolinebreak} % Prevent unicode (U+2060) error on local complile
+\frenchspacing % No double spacing between sentences
+\hbadness=1000000 % Turn off \hbox badness warnings
+\linespread{1.2} % Set linespace
+
+
+% Packages
+\usepackage[a4paper, left=1.5cm, right=1.5cm, top=2.0cm, bottom=2.0cm]{geometry}
+\usepackage{authblk} % For author formatting
+\usepackage{caption} % For figure and table captions
+\usepackage{cclicenses} % For creative commons license
+\usepackage{float} % To force figure location after text
+\usepackage{graphicx} % Adds more functionality to graphics for inclusion of figures
+\usepackage{lscape} % For landscape pages
+\usepackage{lineno} % Allows use of \linenumbers to add line numbers 
+\usepackage{lmodern} % A scalable font - avoids erros due to non-sclabale fonts
+\usepackage{longtable,booktabs}  % For tables
+\usepackage{makecell} % For cell formatting in tables
+\usepackage{markdown} % allow use of markdown syntax
+\usepackage{microtype} % 'Improved' typesetting
+\usepackage[nottoc]{tocbibind} % Add references to table of contents
+\usepackage{parskip} % Adds white space between paragraphs
+\usepackage{pdflscape} % To create landscape pages that show as landscape in PDF viewer
+\usepackage{ragged2e} % Better right ragged edges (allows hyphenation)
+\usepackage{subcaption} % Allows use of subfigures
+\usepackage[super]{natbib} % Citations using superscript
+\usepackage{titlesec} % For title spacing
+\usepackage[toc,page]{appendix}
+\usepackage{url} % Tidy web links
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-\usepackage{lmodern}
+\usepackage{verbatim}
+\usepackage{xcolor} % For coloured text
+\usepackage{xurl} % For url but with more flexible linebreaking
+\usepackage{placeins} % to use \FloatBarrier where want a hard break between content (to force and order of text and figures
 
-%--------------------------------------------------
-% Layout and formatting
-%--------------------------------------------------
-\usepackage[a4paper,margin=3cm]{geometry}
-\usepackage{setspace}
-\onehalfspacing
 
-\usepackage{microtype}
-\usepackage{csquotes} % recommended with biblatex [web:13][web:21]
+% Info on wordcounts:
+% https://www.overleaf.com/learn/how-to/Is_there_a_way_to_run_a_word_count_that_doesn%27t_include_LaTeX_commands%3F
 
-%--------------------------------------------------
-% Maths, symbols, and units
-%--------------------------------------------------
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage{mathtools}
-\usepackage{siunitx}
+% To include refs in word count:
+%TC:incbib
 
-%--------------------------------------------------
-% Figures, tables, and graphics
-%--------------------------------------------------
-\usepackage{graphicx}
-\graphicspath{{figures/}}
-\usepackage{subcaption}
-\usepackage{booktabs}
-\usepackage{multirow}
-\usepackage{caption}
-
-%--------------------------------------------------
-% References, links, and bibliography
-%--------------------------------------------------
-\usepackage[
-  backend=biber,
-  style=authoryear,
-  sorting=nyt,
-  maxcitenames=2,
-  maxbibnames=99,
-  natbib=true
-]{biblatex} % modern bibliography management [web:14][web:17][web:21]
-
-\addbibresource{references.bib} % your .bib file
-
-\usepackage[hidelinks]{hyperref}
-\usepackage[nameinlink,capitalise]{cleveref}
-
-%--------------------------------------------------
-% Miscellaneous
-%--------------------------------------------------
-\usepackage{xcolor}
-\usepackage{enumitem}
-\usepackage{appendix}
-
-%--------------------------------------------------
-% Title
-%--------------------------------------------------
-
-\title{%
-  SAMueL-3\\[0.5em]
-  \large Stroke Audit Machine Learning \& Clinical Pathway Simulation
+\newcommand{\detailtexcount}[1]{%
+  \immediate\write18{texcount -merge -sum -q #1.tex output.bbl > #1.wcdetail }%
+  \verbatiminput{#1.wcdetail}%
 }
 
-\author{Michael Allen}
+% Count tables in wordcount (change to 0 0 if tables not included in word count)
+%TC:group table 0 1
+%TC:group tabular 1 
 
-\date{\today}
-
-%--------------------------------------------------
-% Document
-%--------------------------------------------------
 \begin{document}
 
-\frontmatter
-
+% Ignore title and abstract in word count
+%TC:ignore
+\include{5_additional_material/title}
 \maketitle
+%TC:endignore
 
-\cleardoublepage
-\chapter*{Abstract}
-% TODO: Write abstract here.
 
-\cleardoublepage
-\chapter*{Acknowledgements}
-% TODO: Acknowledgements.
 
-\tableofcontents
-\listoffigures
-\listoftables
+\input{1_intro/intro}
 
-\mainmatter
 
-\chapter{Introduction}
-% TODO: Introduction text.
+%\newpage
 
-\chapter{Background}
-% TODO: Background / literature review.
+%\section{References}
+\bibliographystyle{naturemag}
+%\bibliographystyle{plainnat}
+%\bibliographystyle{unsrt}
+%\bibliographystyle{unsrtnat}
+\bibliography{references}
 
-\chapter{Methods}
-% TODO: Methods.
 
-\chapter{Results}
-% TODO: Results.
 
-\chapter{Discussion}
-% TODO: Discussion.
+% Number for supplementary material
+\newcommand{\beginsupplement}{
+    \setcounter{section}{0}
+    \renewcommand{\thesection}{S\arabic{section}}
+    \setcounter{figure}{0}
+    \renewcommand{\thefigure}{S\arabic{figure}}
+    \setcounter{table}{0}
+    \renewcommand{\thetable}{S\arabic{table}}
+}
+\beginsupplement
 
-\chapter{Conclusion}
-% TODO: Conclusion.
+%TC:ignore
+%\include{sections/08_supplementary_material}
+%TC:endignore
 
-\appendix
-\chapter{Additional Material}
-% TODO: Appendices.
-
-\printbibliography % prints bibliography using biblatex [web:19][web:25]
+% Word counts - Don't count these!
+%TC:ignore
+%\section{Word counts}
+%\detailtexcount{main}
+%TC:endignore
 
 \end{document}
