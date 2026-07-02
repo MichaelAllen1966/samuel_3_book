@@ -1,0 +1,121 @@
+\documentclass[11pt,a4paper,oneside]{book}
+
+%--------------------------------------------------
+% Encoding, language, and fonts
+%--------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+
+%--------------------------------------------------
+% Layout and formatting
+%--------------------------------------------------
+\usepackage[a4paper,margin=3cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage{microtype}
+\usepackage{csquotes} % recommended with biblatex [web:13][web:21]
+
+%--------------------------------------------------
+% Maths, symbols, and units
+%--------------------------------------------------
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{siunitx}
+
+%--------------------------------------------------
+% Figures, tables, and graphics
+%--------------------------------------------------
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{caption}
+
+%--------------------------------------------------
+% References, links, and bibliography
+%--------------------------------------------------
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  sorting=nyt,
+  maxcitenames=2,
+  maxbibnames=99,
+  natbib=true
+]{biblatex} % modern bibliography management [web:14][web:17][web:21]
+
+\addbibresource{references.bib} % your .bib file
+
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,capitalise]{cleveref}
+
+%--------------------------------------------------
+% Miscellaneous
+%--------------------------------------------------
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{appendix}
+
+%--------------------------------------------------
+% Meta-data for title page
+%--------------------------------------------------
+\title{%
+  SAMueL-3\\[0.5em]
+  \large Stroke Audit Machine Learning
+}
+
+\author{Michael Allen}
+
+\date{\today}
+
+%--------------------------------------------------
+% Document
+%--------------------------------------------------
+\begin{document}
+
+\frontmatter
+
+\maketitle
+
+\cleardoublepage
+\chapter*{Abstract}
+% TODO: Write abstract here.
+
+\cleardoublepage
+\chapter*{Acknowledgements}
+% TODO: Acknowledgements.
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter
+
+\chapter{Introduction}
+% TODO: Introduction text.
+
+\chapter{Background}
+% TODO: Background / literature review.
+
+\chapter{Methods}
+% TODO: Methods.
+
+\chapter{Results}
+% TODO: Results.
+
+\chapter{Discussion}
+% TODO: Discussion.
+
+\chapter{Conclusion}
+% TODO: Conclusion.
+
+\appendix
+\chapter{Additional Material}
+% TODO: Appendices.
+
+\printbibliography % prints bibliography using biblatex [web:19][web:25]
+
+\end{document}
