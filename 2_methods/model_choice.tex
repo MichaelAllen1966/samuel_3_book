@@ -1,0 +1,3 @@
+\subsection{Model Choice}
+
+We chose XGBoost (eXtreme Gradient Boosting) \cite{chen_xgboost_2016} as our primary model type. This is because XGBoost is  a fast, efficient, and performs excellently across different types of tabular data, with minimal tuning required \cite{shwartz-ziv_tabular_2022}. XGBoost allows for complex non-linear relations and feature-interactions in the data. XGBoost uses an ensemble of trees to make predictions. As such, XGBoost has poor explainability for any individual prediction. We added explainability by applying SHapley Additive exPlanations (SHAP) \cite{lundberg_consistent_2019} to the XGBoost output, to quantify the relative importance and directional effect of each clinical variable.

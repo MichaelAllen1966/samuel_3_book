@@ -1,15 +1,59 @@
 \subsection{Feature selection}
 
+Figures \ref{fig:feature_selection_1} and \ref{fig:feature_selection_2} show feature selection results. These results should not be interpreted as causal strength of these features, and the full feature set combines features with overlapping information (e.g. onset-to-arrival time implies that the time of stroke onset is known). Given these caveats, we can observe the following.
+
+Clinical outcome is predicted well (ROC-AUC 0.8-0.9 for disability and survival outcomes), and was best predicted by the following features:
+
+\begin{itemize}
+    \item Stroke severity
+    \item Prior disability
+    \item Age
+    \item Stroke team attended
+    \item Stroke type (infarction vs. haemorrhage)
+    \item Treatment (use of thrombolysis contributing more to model accuracy than use of thrombectomy), including thrombolysis-induced haemorrhage
+    \item Process information: arrival by ambulance, onset-to-arrival time, arrival-to-scan time
+    \item Presence of atrial fibrillation and/or use of anticoagulants for atrial fibrillation contributes more to prediction of survival than to general disability level
+\end{itemize}
+
+Length of stay prediction has an $R^2$ of $\sim$0.18, suggesting our known clinical features predict only about 20\% of the variance in length of stay. Given that limited predictive performance, features that help predict length of stay are similar in order of contribution to those that predict clinical outcome.
+
+Use of thrombolysis is predicted well (ROC-AUC $\sim$0.95) from known features. The most important predictive features were:
+
+\begin{itemize}
+    \item Onset-to-arrival time
+    \item Stroke severity
+    \item Stroke type
+    \item Use of anticoagulants
+    \item Arrival-to-scan time
+    \item Whether onset time is known precisely
+    \item Stroke team attended
+    \item Prior disability    
+\end{itemize}
+
+In those receiving thrombolysis, thrombolysis-induced-haemorrhage is predicted only poorly (ROC-AUC $\sim$0.66). 
+    
+Use of thrombectomy is predicted well (ROC-AUC $\sim$0.94) from known features. The most important predictive features were:
+
+\begin{itemize}
+    \item Stroke severity
+    \item Prior disability   
+    \item Stroke type
+    \item Stroke team attended
+    \item Onset-to-arrival time
+    \item Arrival-to-scan time
+    \item Age 
+\end{itemize}
+
 \begin{figure}
     \centering
-    \includegraphics[width=1\linewidth]{images//feature_selection/feature_selection_1.png}
-    \caption{Enter Caption}
+    \includegraphics[width=0.98\linewidth]{images//feature_selection/feature_selection_1.png}
+    \caption{Feature selection for XGBoost model. Features were selected based on Sequential Forward Selection (SFS) utilizing a greedy search algorithm. Results are shown for mRS disability at discharge for all patients, or those untreated with thrombolysis or thrombectomy (top row), disability at discharge being mRS 0-2 for all patients, or those untreated with thrombolysis or thrombectomy (middle row), and for survival until discharge (for all patients, or those untreated with thrombolysis or thrombectomy (bottom row).}
     \label{fig:feature_selection_1}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\linewidth]{images//feature_selection/feature_selection_2.png}
-    \caption{Enter Caption}
-    \label{fig:feature_selection_outcome_2}
+    \includegraphics[width=0.98\linewidth]{images//feature_selection/feature_selection_2.png}
+    \caption{Feature selection for XGBoost model. Features were selected based on Sequential Forward Selection (SFS) utilizing a greedy search algorithm. Results are shown for length of stay for all patients, or those untreated with thrombolysis or thrombectomy (top row), use of thrombolysis in all patients (middle row, left), thrombolysis-induced haemorrhage in patients receiving thrombolysis (middle row, right), and use of thrombectomy in all patients (bottom row).}
+    \label{fig:feature_selection_2}
 \end{figure}

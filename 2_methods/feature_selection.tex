@@ -1,0 +1,19 @@
+\subsection{Feature selection}
+
+Prior to designing models to answer specific questions, and in order to assess how important features were in predicting treatment choice and outcomes, we performed feature selection, using clinical and process data for the following model outputs.
+
+\begin{itemize}
+    \item mRS disability at discharge for all patients, or those untreated with either thrombolysis or thrombectomy.
+    \item Disability at discharge being mRS 0-2 for all patients, or those untreated with either thrombolysis or thrombectomy.
+    \item Survival until discharge for all patients, or those untreated with thrombolysis or thrombectomy.
+    \item Length of stay for all patients, or those untreated with thrombolysis or thrombectomy.
+    \item Use of thrombolysis.
+    \item Thrombolysis-induced haemorrhage.
+    \item Use of thrombectomy.
+\end{itemize}
+
+Models were assessed by either Receiving Operator Characteristic Area Under Curve (ROC-AUC) for binomial or categorical outputs, or $R^2$ for continuous outputs.
+
+Outcomes in patients who did not receive treatment with either thrombolysis or thrombectomy were modelled separately in order to understand features that affect outcomes independent of these treatments. Understanding which features affect outcome independent of treatment, and understanding features which predict use of thrombolysis and/or thrombectomy, allow us to design models better able to isolate the effect of thrombolysis and/or thrombectomy.
+
+In addition to features available in the data, three random variables (continuous, discrete, and binomial) were added to serve as benchmarks of data that adds no value to model predictions.
