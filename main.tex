@@ -59,6 +59,7 @@
 %TC:ignore
 \include{5_additional_material/title}
 \maketitle
+\tableofcontents
 %TC:endignore
 
 
@@ -96,10 +97,16 @@
     \setcounter{table}{0}
     \renewcommand{\thetable}{S\arabic{table}}
 }
-\beginsupplement
+\beginsupplement % Resets numbering
+
+\clearpage
+
+\section*{Supplementary Material}
+\addcontentsline{toc}{section}{Supplementary material}
+
 
 %TC:ignore
-\include{6_supplement/notebook_links}
+\input{6_supplement/notebook_links}
 %TC:endignore
 
 % Word counts - Don't count these!
