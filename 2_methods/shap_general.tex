@@ -1,0 +1,12 @@
+\subsection{SHAP Analysis in general models}
+
+Following feature selection, SHAP values were computed for each fitted model using the TreeSHAP algorithm~\cite{lundberg2018consistent}. SHAP decomposes each individual
+prediction into an additive sum of feature contributions:
+
+\begin{equation}
+    \hat{f}(x) = \phi_0 + \sum_{j=1}^{p} \phi_j
+\end{equation}
+
+\noindent where $\hat{f}(x)$ is the model prediction for patient $x$, $\phi_0$ is the base value (the mean prediction over the training set), and $\phi_j$ is the SHAP value for feature $j$. For binary classification outcomes (survival, mRS 0--2, use of thrombolysis or thrombectomy, and thrombolysis-induced haemorrhage), SHAP values are expressed in log-odds units, such that summing all SHAP values with the base value yields the model's final log-odds prediction. For the continuous regression outcome (length of stay), SHAP values are expressed in days.
+
+Because the model permits interactions between features, two patients with identical values for a given feature may receive different SHAP values for that feature depending on the values of their other characteristics.
