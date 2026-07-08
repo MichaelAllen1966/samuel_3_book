@@ -1,5 +1,24 @@
 \subsection{SHAP analysis of general models}
 
+Figures \ref{fig:shap_mrs0-2_no_all} to \ref{fig:shap_thrombectomy_all} show SHAP analysis for the different models. SHAP values quantify how each feature, given its specific value for an individual patient, contributed to that patient's model prediction. Each prediction is composed of two parts: a base value, common to all predictions from that model, and the sum of the SHAP values for every feature in that individual's case. Because the model allows for interactions between features, two patients with identical values for a given feature may still receive different SHAP values for that feature, depending on their other characteristics.
+
+The units of the SHAP values depend on the type of model output. For binary outcomes (survival, discharge mRS 0-2, use of thrombolysis or thrombectomy, and thrombolysis-induced haemorrhage), SHAP values are expressed in log-odds; summing them with the base value yields the final log-odds prediction. For the continuous regression outcome (length of stay), SHAP values are expressed in the same units as the outcome itself (days).
+
+In each figure, the top plot is a SHAP \textit{bee-swarm} plot. Feature values are colour-coded from blue (low) to red (high); for stroke severity, for example, blue points indicate low severity and red points indicate high severity. The position on the x-axis shows the SHAP value for each point, with points further to the left indicating that the feature is pushing the model's prediction lower (though this effect may be offset by other features, since SHAP values are additive). Points further to the right indicate the opposite: the feature is pushing the prediction higher. Features are ordered top-to-bottom by their overall importance - specifically, by the mean absolute SHAP value across all instances in the dataset, with the most influential feature at the top and the least influential at the bottom.
+
+Below the top plot in each figure are two further plots showing the SHAP values for the two categorical features, ethnicity and stroke team. Because these features are categorical rather than continuous, they cannot be colour-coded by value in the same way as the bee-swarm plot above; instead, each category is shown separately. For each of the five ethnicity categories (Asian, Black, Mixed, Other/Not Known, White), the SHAP values for that feature—which will depend on interactions with other features—are shown as a violin plot combined with a box plot. The violin plot shows the full distribution and density of SHAP values within each category, while the overlaid box plot summarises this distribution using the median, interquartile range, and outliers, allowing comparison of both central tendency and spread across ethnicity or stroke team categories.SHAP values for stroke teams are shown as a bar chart, with one bar per stroke team representing that team's average SHAP value across all its patients. Bars are ordered from highest to lowest SHAP value, so that teams associated with the largest positive contribution to the model's prediction appear at one end, and those with the largest negative contribution appear at the other.
+
+Though SHAP adds explainability to the model, care should be taken remembering that SHAP values show the influence of a feature value to the final prediction, but that this relationship is not necessarily causal (just as nicotine-stained fingernails may indicate high risk of lung cancer, but the stained nails do not cause the lung cancer). These models and plots are exploratory work, investigating which features may need to be included in later causal models.
+
+Some observations may be made:
+
+\textbf{Prediction of favourable outcome (mRS 0-2) at discharge} (figure \ref{fig:shap_mrs0-2_no_all}): Lower disability outcomes are especially associated with lower stroke severity, lower prior disability, and lower age. Ischaemic stroke patients have a lower chance of favourable outcomes, compared to haemorrhagic stroke (if all other feature values were similar). The stroke team attended also significantly affects the odds of being discharged mRS 0-2. Black and Asian patients have somewhat lower odds of being discharged mRS 0-2. Lower thrombolysis or thrombectomy improve the odds of being discharged mRS 0-2, but longer times to treatment can worsen those odds compared to untreated patients. Figure \ref{fig:shap_mrs0-2_no_treatment} repeats the modelling, but for patients not treated with thrombolysis or thrombectomy, confirming that stroke severity, age, prior disability, stroke team and stroke type are the most important features affecting odds of being discharged mRS 0-2, independent of treatment.
+
+\textbf{Prediction of survival until discharge} (figure \ref{fig:shap_survival_all}): Survival is especially associated with lower stroke severity, lower age, and lower prior disability. The stroke team attended also significantly affects the odds of survival. Ischaemic stroke patients have a lower chance of survival, compared to haemorrhagic stroke (if all other feature values were similar). Black, Asian, and Mixed ethnicity patients have a \textit{higher} odds of survival compared to white patients (but, as we previously say, with lower odds of being discharged disability-free). Figure \ref{fig:shap_survival_no_treatment} repeats the modelling, but for patients not treated with thrombolysis or thrombectomy, confirming that stroke severity, age, prior disability, stroke team and stroke type are the most important features affecting odds of being discharged mRS 0-2, independent of treatment.
+
+\textbf{Prediction of length of stay} (figure \ref{fig:shap_los_all} for all patients, and figure \ref{fig:shap_los_surviving} for patients who survive until discharge): Higher stroke severity can lead to both longer or shorter length of stay across all patients, but is associated with longer length so stay for patients who survive until discharge. Stoke team has a significant effect on length of stay. Increasing age is associated with lower lengths of stay. Shorter onset-to-arrival times are associated with lower lengths of stay. Haemorrhagic stroke is associated with longer length of stay, compared with ischaemic stroke.
+
+
 %%%%%%%%%%% Discharge disability 0-2 %%%%%%%%%%%%%%%
 
 %% All patients
@@ -165,3 +184,135 @@
     \caption{SHAP analysis of feature contributions to predicting length of stay for stroke patients. \textit{Top}: A SHAP summary plot detailing feature impacts on the model's predictions. Each point represents an individual patient. The x-axis indicates the SHAP value, where positive values increase the predicted length of stay, and negative values decrease it. For continuous and binary variables, colour represents the original feature value (red for high; blue for low). Categorical variables (\textit{stroke team} and \textit{ethnicity}) are plotted in grey. \textit{Bottom left}: Violin plots illustrating the distribution of SHAP values across ethnic groups, highlighting the marginal impact of ethnicity on the predicted length of stay. \textit{Bottom right}: A ranked bar chart displaying the average SHAP value for each stroke team. This visualizes institutional variation, reflecting the treating stroke team's contribution to the length of stay after accounting for patient-level clinical characteristics.}
     \label{fig:shap_los_all}
 \end{figure}
+
+
+%%% Surviving patients
+
+\begin{figure}[htbp]
+    \centering
+    
+    % Top image (Full width)
+    \begin{subfigure}{0.50\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_surviving_patients_los.png}
+        %\caption{}
+        \label{fig:top}
+    \end{subfigure}
+
+    \vspace{0.5cm} % Optional vertical space between rows
+
+    % Bottom left image (~45% width)
+    \begin{subfigure}{0.407\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_surviving_patients_los_ethnicity.png}
+        %\caption{}
+        \label{fig:bottom-left}
+    \end{subfigure}
+    \hfill % Adds flexible horizontal spacing
+    % Bottom right image (~55% width)
+    \begin{subfigure}{0.543\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_surviving_patients_los_stroke_team.png}
+        %\caption{}
+        \label{fig:bottom-right}
+    \end{subfigure}
+
+    \caption{SHAP analysis of feature contributions to predicting length of stay for stroke patients who survive until discharge. \textit{Top}: A SHAP summary plot detailing feature impacts on the model's predictions. Each point represents an individual patient. The x-axis indicates the SHAP value, where positive values increase the predicted length of stay, and negative values decrease it. For continuous and binary variables, colour represents the original feature value (red for high; blue for low). Categorical variables (\textit{stroke team} and \textit{ethnicity}) are plotted in grey. \textit{Bottom left}: Violin plots illustrating the distribution of SHAP values across ethnic groups, highlighting the marginal impact of ethnicity on the predicted length of stay. \textit{Bottom right}: A ranked bar chart displaying the average SHAP value for each stroke team. This visualizes institutional variation, reflecting the treating stroke team's contribution to the length of stay after accounting for patient-level clinical characteristics.}
+    \label{fig:shap_los_surviving}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%% Use of thrombolysis %%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[htbp]
+    \centering
+    
+    % Top image (Full width)
+    \begin{subfigure}{0.50\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_all_patients_thrombolysis_use.png}
+        %\caption{}
+        \label{fig:top}
+    \end{subfigure}
+
+    \vspace{0.5cm} % Optional vertical space between rows
+
+    % Bottom left image (~45% width)
+    \begin{subfigure}{0.407\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_all_patients_thrombolysis_use_ethnicity.png}
+        %\caption{}
+        \label{fig:bottom-left}
+    \end{subfigure}
+    \hfill % Adds flexible horizontal spacing
+    % Bottom right image (~55% width)
+    \begin{subfigure}{0.543\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_all_patients_thrombolysis_use_stroke_team.png}
+        %\caption{}
+        \label{fig:bottom-right}
+    \end{subfigure}
+
+    \caption{SHAP analysis of feature contributions to predicting use of thrombolysis in stroke patients. \textit{Top}: A SHAP summary plot detailing the impact of features on the model's log-odds predictions. Each point represents an individual patient instance. The position on the x-axis indicates the SHAP value, where positive values increase the predicted odds of receiving thrombolysis, and negative values decrease it. For continuous and binary variables, colour represents the original feature value (red indicating high values; blue indicating low values). Categorical variables (\textit{stroke team} and \textit{ethnicity}) are plotted in grey. \textit{Bottom left}: Violin plots illustrating the distribution of SHAP values across distinct ethnic groups. This panel highlights the marginal impact and variance of ethnicity on the model's prediction for thrombolysis use. \textit{Bottom Right}: A ranked bar chart displaying the average SHAP value associated with each individual stroke team. This panel visualizes institutional variation, reflecting the contribution of the treating stroke team to the predicted likelihood of receiving thrombolysis after accounting for patient-level clinical characteristics.}  
+    \label{fig:shap_thrombolysis_all}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%% Use of thrombectomy %%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[htbp]
+    \centering
+    
+    % Top image (Full width)
+    \begin{subfigure}{0.50\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_all_patients_thrombectomy_use.png}
+        %\caption{}
+        \label{fig:top}
+    \end{subfigure}
+
+    \vspace{0.5cm} % Optional vertical space between rows
+
+    % Bottom left image (~45% width)
+    \begin{subfigure}{0.407\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_all_patients_thrombectomy_use_ethnicity.png}
+        %\caption{}
+        \label{fig:bottom-left}
+    \end{subfigure}
+    \hfill % Adds flexible horizontal spacing
+    % Bottom right image (~55% width)
+    \begin{subfigure}{0.543\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_all_patients_thrombolysis_use_stroke_team.png}
+        %\caption{}
+        \label{fig:bottom-right}
+    \end{subfigure}
+
+    \caption{SHAP analysis of feature contributions to predicting use of thrombectomy in stroke patients. \textit{Top}: A SHAP summary plot detailing the impact of features on the model's log-odds predictions. Each point represents an individual patient instance. The position on the x-axis indicates the SHAP value, where positive values increase the predicted odds of receiving thrombectomy, and negative values decrease it. For continuous and binary variables, colour represents the original feature value (red indicating high values; blue indicating low values). Categorical variables (\textit{stroke team} and \textit{ethnicity}) are plotted in grey. \textit{Bottom left}: Violin plots illustrating the distribution of SHAP values across distinct ethnic groups. This panel highlights the marginal impact and variance of ethnicity on the model's prediction for thrombectomy use. \textit{Bottom Right}: A ranked bar chart displaying the average SHAP value associated with each individual stroke team. This panel visualizes institutional variation, reflecting the contribution of the treating stroke team to the predicted likelihood of receiving thrombectomy after accounting for patient-level clinical characteristics.}  
+    \label{fig:shap_thrombectomy_all}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%% Thrombolysis-induced haemorrhage %%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[htbp]
+    \centering
+    
+    % Top image (Full width)
+    \begin{subfigure}{0.50\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_thrombolysis_induced_haemorrhage_use.png}
+        %\caption{}
+        \label{fig:top}
+    \end{subfigure}
+
+    \vspace{0.5cm} % Optional vertical space between rows
+
+    % Bottom left image (~45% width)
+    \begin{subfigure}{0.407\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_thrombolysis_induced_haemorrhage_use_ethnicity.png}
+        %\caption{}
+        \label{fig:bottom-left}
+    \end{subfigure}
+    \hfill % Adds flexible horizontal spacing
+    % Bottom right image (~55% width)
+    \begin{subfigure}{0.543\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_thrombolysis_induced_haemorrhage_use_stroke_team.png}
+        %\caption{}
+        \label{fig:bottom-right}
+    \end{subfigure}
+    \caption{SHAP analysis of feature contributions to predicting thrombolysis-induced haemorrhage in stroke patients who have received thrombolysis. \textit{Top}: A SHAP summary plot detailing the impact of features on the model's log-odds predictions. Each point represents an individual patient instance. The position on the x-axis indicates the SHAP value, where positive values increase the predicted odds of haemorrhage, and negative values decrease it. For continuous and binary variables, colour represents the original feature value (red indicating high values; blue indicating low values). Categorical variables (\textit{stroke team} and \textit{ethnicity}) are plotted in grey. \textit{Bottom left}: Violin plots illustrating the distribution of SHAP values across distinct ethnic groups. This panel highlights the marginal impact and variance of ethnicity on the model's prediction for haemorrhage risk. \textit{Bottom Right}: A ranked bar chart displaying the average SHAP value associated with each individual stroke team. This panel visualizes institutional variation, reflecting the contribution of the treating stroke team to the predicted risk of thrombolysis-induced haemorrhage after accounting for patient-level clinical characteristics.}
+    \label{fig:shap_thrombectomy_all}
+\end{figure}
+
+
