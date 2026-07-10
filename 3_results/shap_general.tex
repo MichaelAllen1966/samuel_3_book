@@ -173,20 +173,26 @@ Some observations may be made:
     \vspace{0.5cm} % Optional vertical space between rows
 
     % Bottom left image (~45% width)
-    \begin{subfigure}{0.407\textwidth}
+    \begin{subfigure}{0.24\textwidth}
         \includegraphics[width=\linewidth]{images/shap/shap_all_patients_los_ethnicity.png}
         %\caption{}
         \label{fig:bottom-left}
     \end{subfigure}
     \hfill % Adds flexible horizontal spacing
+        \begin{subfigure}{0.24\textwidth}
+        \includegraphics[width=\linewidth]{images/shap/shap_all_patients_los_discharge_destination.png}
+        %\caption{}
+        \label{fig:bottom-middke}
+    \end{subfigure}
+    \hfill
     % Bottom right image (~55% width)
-    \begin{subfigure}{0.543\textwidth}
+    \begin{subfigure}{0.49\textwidth}
         \includegraphics[width=\linewidth]{images/shap/shap_all_patients_los_stroke_team.png}
         %\caption{}
         \label{fig:bottom-right}
     \end{subfigure}
 
-    \caption{SHAP analysis of feature contributions to predicting length of stay for stroke patients. \textit{Top}: A SHAP summary plot detailing feature impacts on the model's predictions. Each point represents an individual patient. The x-axis indicates the SHAP value, where positive values increase the predicted length of stay, and negative values decrease it. For continuous and binary variables, colour represents the original feature value (red for high; blue for low). Categorical variables (\textit{stroke team} and \textit{ethnicity}) are plotted in grey. \textit{Bottom left}: Violin plots illustrating the distribution of SHAP values across ethnic groups, highlighting the marginal impact of ethnicity on the predicted length of stay. \textit{Bottom right}: A ranked bar chart displaying the average SHAP value for each stroke team. This visualizes institutional variation, reflecting the treating stroke team's contribution to the length of stay after accounting for patient-level clinical characteristics.}
+    \caption{SHAP analysis of feature contributions to predicting length of stay for stroke patients. \textit{Top}: A SHAP summary plot detailing feature impacts on the model's predictions. Each point represents an individual patient. The x-axis indicates the SHAP value, where positive values increase the predicted length of stay, and negative values decrease it. For continuous and binary variables, colour represents the original feature value (red for high; blue for low). Categorical variables (\textit{stroke team} and \textit{ethnicity}) are plotted in grey. \textit{Bottom left and middle}: Violin plots illustrating the distribution of SHAP values across ethnic groups and by discharge destination, highlighting the marginal impact of ethnicity oand discharge destination on the predicted length of stay. \textit{Bottom right}: A ranked bar chart displaying the average SHAP value for each stroke team. This visualizes institutional variation, reflecting the treating stroke team's contribution to the length of stay after accounting for patient-level clinical characteristics.}
     \label{fig:shap_los_all}
 \end{figure}
 
